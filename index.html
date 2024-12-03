@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartphone with Bezel</title>
+    <style>
+        .smartphone {
+            width: 320px;
+            /* 스마트폰 전체 너비 */
+            height: 640px;
+            /* 스마트폰 전체 높이 */
+            background: #333;
+            /* 베젤 색상 */
+            border-radius: 40px;
+            /* 둥근 모서리 */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            /* 외곽 그림자 */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .screen {
+            width: 280px;
+            /* 화면 너비 */
+            height: 560px;
+            /* 화면 높이 */
+            background: #fff;
+            /* 화면 배경색 */
+            border-radius: 30px;
+            /* 화면 둥근 모서리 */
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+            /* 내부 그림자 */
+            position: relative;
+        }
+
+        .smartphone::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 5px;
+            background: #aaa;
+            border-radius: 5px;
+            /* 상단 스피커 모양 */
+        }
+
+        .smartphone::after {
+            content: "새로고침";
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 60px;
+            height: 20px;
+            background: #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            /* 텍스트 크기 */
+            /* 하단 버튼 모양 */
+            z-index: 10;
+            /* 클릭 영역을 확장 */
+            cursor: pointer;
+            /* 마우스 커서를 클릭 가능 상태로 변경 */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            bottom: -30%;
+        }
+
+        .image-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            bottom: -15%;
+        }
+
+        .arrow {
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            color: #333;
+            padding: 10px;
+        }
+
+        .arrow.disabled {
+            color: #ccc;
+            pointer-events: none;
+        }
+
+        .list-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        ul {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        li {
+            flex: 0 0 100%;
+            text-align: center;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="smartphone">
+        <div class="screen">
+            <div class="image-container">
+                <div class="list-container">
+                    <ul id="list2">
+                        <li><img class="imgs" src="icon/온도.png" alt="Icon 1"></li>
+                        <li><img class="imgs" src="icon/습도.png" alt="Icon 1"></li>
+                        <li><img class="imgs" src="icon/작은먼지.png" alt="Icon 1"></li>
+                        <li><img class="imgs" src="icon/중간먼지.png" alt="Icon 1"></li>
+                        <li><img class="imgs" src="icon/큰먼지.png" alt="Icon 1"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slider-container">
+                <span class="arrow" id="prev-arrow">◀</span>
+                <div class="list-container">
+                    <ul id="list">
+                        <li>온도: {{ data.get('Temperature', '데이터 없음') }}</li>
+                        <li>습도: {{ data.get('Humidity', '데이터 없음') }}</li>
+                        <li>PM1.0: {{ data.get('PM1.0', '데이터 없음') }}</li>
+                        <li>PM2.5: {{ data.get('PM2.5', '데이터 없음') }}</li>
+                        <li>PM10: {{ data.get('PM10', '데이터 없음') }}</li>
+                    </ul>
+                </div>
+                <span class="arrow" id="next-arrow">▶</span>
+            </div>
+        </div>
+        <script>
+            const list = document.getElementById("list");
+            const list2 = document.getElementById("list2");
+            const prevArrow = document.getElementById("prev-arrow");
+            const nextArrow = document.getElementById("next-arrow");
+
+            let currentIndex = 0; // 현재 표시된 li의 인덱스
+
+            const updateArrows = () => {
+                prevArrow.classList.toggle("disabled", currentIndex === 0);
+                nextArrow.classList.toggle("disabled", currentIndex === list.children.length - 1);
+            };
+
+            const moveList = () => {
+                const offset = -currentIndex * 100; // 이동 거리 계산
+                list.style.transform = `translateX(${offset}%)`;
+                list2.style.transform = `translateX(${offset}%)`;
+                updateArrows();
+            };
+
+            prevArrow.addEventListener("click", () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    moveList();
+                }
+            });
+
+            nextArrow.addEventListener("click", () => {
+                if (currentIndex < list.children.length - 1) {
+                    currentIndex++;
+                    moveList();
+                }
+            });
+
+            // 초기 상태 업데이트
+            document.querySelector('.smartphone').addEventListener('click', function (event) {
+                // ::after 영역의 위치와 크기 확인
+                const afterElement = window.getComputedStyle(event.target, '::after');
+                const rect = event.target.getBoundingClientRect();
+
+                // ::after의 영역을 계산하여 클릭된 위치가 그 안에 있는지 확인
+                if (
+                    event.clientX >= rect.left + parseInt(afterElement.left, 10) &&
+                    event.clientX <= rect.right + parseInt(afterElement.left, 10) &&
+                    event.clientY >= rect.top + parseInt(afterElement.top, 10) &&
+                    event.clientY <= rect.bottom + parseInt(afterElement.top, 10)
+                ) {
+                    location.reload();  // 클릭된 부분에서만 새로 고침
+                }
+            });
+        </script>
+</body>
+
+</html>
