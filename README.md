@@ -1,4 +1,4 @@
-# smartphontdesign
+# smartphone design
 
 그냥 귀여워서,, <br/>
 
