@@ -1,8 +1,9 @@
 <h1>smartphone design</h1>
 
+## 그냥 
 ```bash
 
-##그냥 귀여워서,,
+귀여워서,,
 
 ```
 
