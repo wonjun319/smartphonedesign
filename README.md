@@ -1,4 +1,4 @@
-<title>smartphone design</title>
+<h1>smartphone design</h1>
 '''bash
 ##그냥 귀여워서,, <br/>
 ---
