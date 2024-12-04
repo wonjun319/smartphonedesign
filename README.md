@@ -1,6 +1,7 @@
-<h1>smartphone design</h1>
+## smartphone design
 
-## 그냥 
+- 그냥
+
 ```bash
 
 귀여워서,,
